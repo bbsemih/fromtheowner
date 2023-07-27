@@ -61,6 +61,7 @@ export class UsersController {
     };
 
     @Patch('/:id')
+    @UseGuards(AuthGuard)
     updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
         return this.usersService.update(parseInt(id), body);
     }
