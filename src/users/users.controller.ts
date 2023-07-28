@@ -5,8 +5,6 @@ import { UsersService } from './users.service';
 import { Serialize} from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
-import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
@@ -38,7 +36,6 @@ export class UsersController {
         return user; 
     };
 
-    @Serialize(UserDto)
     @Get('/:id')
     async findUser(@Param('id') id: string) {
         console.log('Handler is running');
@@ -55,13 +52,11 @@ export class UsersController {
     };
 
     @Delete('/:id')
-    @UseGuards(AuthGuard)
     removeUser(@Param('id') id: string) {
         return this.usersService.remove(parseInt(id));
     };
 
     @Patch('/:id')
-    @UseGuards(AuthGuard)
     updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
         return this.usersService.update(parseInt(id), body);
     }
