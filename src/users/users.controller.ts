@@ -6,6 +6,8 @@ import { Serialize} from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { User } from './user.entity';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -14,6 +16,12 @@ export class UsersController {
         private usersService: UsersService,
         private authService: AuthService
         ) {}        
+
+    @Get('/whoami')
+    @UseGuards(AuthGuard)
+    whoami(@CurrentUser() user: User) {
+        return user;
+    };
 
     @Post('/signout')
     signout(@Session() session: any) {
