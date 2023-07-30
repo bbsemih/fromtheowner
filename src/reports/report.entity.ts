@@ -1,10 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
 import { User } from "src/users/user.entity";
 
 @Entity()
 export class Report {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({default:false})
+    approved: boolean;
 
     @Column()
     price: number;
