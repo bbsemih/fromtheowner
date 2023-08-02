@@ -21,7 +21,6 @@ const cookieSession = require('cookie-session');
 
     })
     */
-    ,
     //Set up this to adapt to different environments
     TypeOrmModule.forRootAsync({
       inject:[ConfigService],

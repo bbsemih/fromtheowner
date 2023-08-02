@@ -3,15 +3,17 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Logger } from '@nestjs/common';
-//TODO: Implement winston as logger to replace built-in logger of nestjs
+import { LogService } from 'src/logger/logger.service';
+
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private repo: Repository<User>) {}
+    constructor(@InjectRepository(User) private repo: Repository<User>, private readonly logger: LogService) {}
     async create(email: string, password: string) {
         const user = this.repo.create({ email, password });
         try {
             const newUser = await this.repo.save(user);
+            //this.logger.info(`new user created: ${newUser.email}`, 'UsersService', 'info', 'users.service.ts', 'service');
             Logger.log(`new user created: ${newUser.email}`);
             return newUser;
         }
