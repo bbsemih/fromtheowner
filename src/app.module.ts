@@ -16,7 +16,7 @@ const cookieSession = require('cookie-session');
       isGlobal:true,
       envFilePath:`.env.${process.env.NODE_ENV}`
     }),
-    //Set up this to adapto to different environments
+    //Set up this to adapt to different environments
     TypeOrmModule.forRootAsync({
       inject:[ConfigService],
       useFactory: (config:ConfigService) => {
@@ -40,7 +40,7 @@ const cookieSession = require('cookie-session');
     })
   }
   ],
-})
+}) 
 export class AppModule {
   constructor(private configService:ConfigService) {}
 
