@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    //TODO: set different logging level based on environment
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
     //allow only warn and error types to only see critical log information in production
     //logger: process.env.NODE_ENV == 'development' ? ['log', 'debug', 'verbose', 'error','warn'] : ['error', 'warn']
@@ -15,12 +14,22 @@ async function bootstrap() {
     .setDescription("API Documentation of 'fromtheowner' application")
     .setVersion('1.0.0')
     .addTag('api','swagger')
-    .build();
+    .build()
 
-    const document = SwaggerModule.createDocument(app,config)
-    SwaggerModule.setup('api',app,document)
+    const document = SwaggerModule.createDocument(app,config);
+    SwaggerModule.setup('/v1/fromtheowner/api',app,document);
 
-  app.enableCors();
+
+    if(process.env.CORS_ENABLE) {
+      app.enableCors({
+        origin: origin.length === 0 ? '*' : origin,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        //will add more options
+      });
+    } else {
+      app.enableCors();
+    };
+
   await app.listen(3000);
 };
 bootstrap();

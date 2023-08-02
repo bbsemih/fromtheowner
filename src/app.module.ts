@@ -16,10 +16,17 @@ const cookieSession = require('cookie-session');
       isGlobal:true,
       envFilePath:`.env.${process.env.NODE_ENV}`
     }),
+    /*
+    RedisModule.forRootAsync({
+
+    })
+    */
+    ,
     //Set up this to adapt to different environments
     TypeOrmModule.forRootAsync({
       inject:[ConfigService],
       useFactory: (config:ConfigService) => {
+        //TODO: migrate to postgresql
         return {
           type:'sqlite',
           database: config.get<string>('DB_NAME'),

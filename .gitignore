@@ -3,7 +3,8 @@
 /node_modules
 
 # environments
-*.env.*
+*.env.development
+*.env.test
 
 *.sqlite
 # Logs
