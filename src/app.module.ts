@@ -1,4 +1,4 @@
-import { Module, ValidationPipe, MiddlewareConsumer } from '@nestjs/common';
+import { Module, ValidationPipe, MiddlewareConsumer, Query } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -8,7 +8,12 @@ import { ReportsModule } from './reports/reports.module';
 import { User } from './users/user.entity';
 import { Report } from './reports/report.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { WinstonModule, utilities as nestWinstonUtilities } from 'nest-winston';
+import { LoggerModule } from './logger/logger.module';
+import * as winston from 'winston';
 const cookieSession = require('cookie-session');
+
+//customFormat
 
 @Module({
   imports: [
@@ -34,7 +39,13 @@ const cookieSession = require('cookie-session');
         }
       }
     }),
-    UsersModule, ReportsModule],
+    WinstonModule.forRoot({
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.colorize(),
+      ),
+    }),
+    UsersModule, ReportsModule, LoggerModule ],
   controllers: [AppController],
   providers: [AppService,
   {

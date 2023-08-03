@@ -23,11 +23,12 @@ export class LogService implements LoggerF {
         })
     };
 
-    warn(msg: string, className: string ,level: LogLevelEnum.WARN, type: LogTypeEnum.SERVICE): void {
+    warn(msg: string, className: string ,level: LogLevelEnum.WARN,filename: string, type: LogTypeEnum.SERVICE): void {
         this.logger.log(msg, {
             type: type,
             level: level,
             class: className,
+            filename: filename,
         });
     };
 
@@ -39,11 +40,12 @@ export class LogService implements LoggerF {
         });
     }
 
-    error(msg: string,className: string, level: LogLevelEnum.ERROR, type: LogTypeEnum.SERVICE): void {
+    error(msg: string,className: string, level: LogLevelEnum.ERROR, filename: string, type: LogTypeEnum.SERVICE): void {
         this.logger.log(msg, {
             type: type,
             level: level,
             class: className,
+            filename: filename,
         });    
     };   
     http(method: string, url: string, code:number, contentLength: string, userAgent: string, ip:string, level: LogLevelEnum, type:LogTypeEnum.HTTP): void {
