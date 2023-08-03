@@ -8,12 +8,11 @@ import { ReportsModule } from './reports/reports.module';
 import { User } from './users/user.entity';
 import { Report } from './reports/report.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { WinstonModule, utilities as nestWinstonUtilities } from 'nest-winston';
+import { WinstonModule } from 'nest-winston';
 import { LoggerModule } from './logger/logger.module';
+import { CarsController } from './cars/cars.controller';
 import * as winston from 'winston';
 const cookieSession = require('cookie-session');
-
-//customFormat
 
 @Module({
   imports: [
@@ -40,13 +39,22 @@ const cookieSession = require('cookie-session');
       }
     }),
     WinstonModule.forRoot({
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.colorize(),
-      ),
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.colorize(),
+            winston.format.simple(),
+          ),
+        }),
+      ],
+      //format: winston.format.combine(
+       // winston.format.timestamp(),
+       // winston.format.colorize(),
+      //),
     }),
     UsersModule, ReportsModule, LoggerModule ],
-  controllers: [AppController],
+  controllers: [AppController, CarsController],
   providers: [AppService,
   {
     provide:APP_PIPE,
