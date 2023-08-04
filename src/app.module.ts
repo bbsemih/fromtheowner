@@ -1,4 +1,4 @@
-import { Module, ValidationPipe, MiddlewareConsumer, Query } from '@nestjs/common';
+import { Module, ValidationPipe, MiddlewareConsumer, Query, Controller } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -45,13 +45,12 @@ const cookieSession = require('cookie-session');
             winston.format.timestamp(),
             winston.format.colorize(),
             winston.format.simple(),
+            winston.format.printf((msg) => {
+              return `[${msg.level}] ${msg.timestamp} | ${msg.message} | class: ${msg.context.class} | filename: ${msg.context.filename} | type: ${msg.context.type}`;
+            })
           ),
         }),
       ],
-      //format: winston.format.combine(
-       // winston.format.timestamp(),
-       // winston.format.colorize(),
-      //),
     }),
     UsersModule, ReportsModule, LoggerModule ],
   controllers: [AppController, CarsController],
