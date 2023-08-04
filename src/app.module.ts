@@ -17,8 +17,8 @@ const cookieSession = require('cookie-session');
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal:true,
-      envFilePath:`.env.${process.env.NODE_ENV}`
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     /*
     RedisModule.forRootAsync({
@@ -27,16 +27,16 @@ const cookieSession = require('cookie-session');
     */
     //Set up this to adapt to different environments
     TypeOrmModule.forRootAsync({
-      inject:[ConfigService],
-      useFactory: (config:ConfigService) => {
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
         //TODO: migrate to postgresql
         return {
-          type:'sqlite',
+          type: 'sqlite',
           database: config.get<string>('DB_NAME'),
-          synchronize:true,
-          entities:[User,Report]
-        }
-      }
+          synchronize: true,
+          entities: [User, Report],
+        };
+      },
     }),
     WinstonModule.forRoot({
       transports: [
@@ -45,32 +45,40 @@ const cookieSession = require('cookie-session');
             winston.format.timestamp(),
             winston.format.colorize(),
             winston.format.simple(),
-            winston.format.printf((msg) => {
+            winston.format.printf(msg => {
               return `[${msg.level}] ${msg.timestamp} | ${msg.message} | class: ${msg.context.class} | filename: ${msg.context.filename} | type: ${msg.context.type}`;
-            })
+            }),
           ),
         }),
       ],
     }),
-    UsersModule, ReportsModule, LoggerModule ],
-  controllers: [AppController, CarsController],
-  providers: [AppService,
-  {
-    provide:APP_PIPE,
-    //Whenever we create instance of Appmodule, automatically make use of this pipe globally. Implement it to every request.
-    //This need emerged from the server error that i got while i was implementing integration test
-    useValue: new ValidationPipe({
-      whitelist:true,
-    })
-  }
+    UsersModule,
+    ReportsModule,
+    LoggerModule,
   ],
-}) 
+  controllers: [AppController, CarsController],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      //Whenever we create instance of Appmodule, automatically make use of this pipe globally. Implement it to every request.
+      //This need emerged from the server error that i got while i was implementing integration test
+      useValue: new ValidationPipe({
+        whitelist: true,
+      }),
+    },
+  ],
+})
 export class AppModule {
-  constructor(private configService:ConfigService) {}
+  constructor(private configService: ConfigService) {}
 
-  configure(consumer:MiddlewareConsumer) {
-    consumer.apply(cookieSession({
-      keys: [this.configService.get('COOKIE_KEY')],
-    })).forRoutes('*');
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        cookieSession({
+          keys: [this.configService.get('COOKIE_KEY')],
+        }),
+      )
+      .forRoutes('*');
   }
-};
+}

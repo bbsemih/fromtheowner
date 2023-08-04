@@ -11,15 +11,11 @@ import { LoggerModule } from 'src/logger/logger.module';
 @Module({
   imports: [TypeOrmModule.forFeature([User]), LoggerModule],
   controllers: [UsersController],
-  providers: [
-    UsersService, 
-    AuthService, 
-    LogService
-  ],
+  providers: [UsersService, AuthService, LogService],
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
     //will run after cookie session middleware
-    consumer.apply(CurrentUserMiddleware).forRoutes("*");
-  };
-};
+    consumer.apply(CurrentUserMiddleware).forRoutes('*');
+  }
+}

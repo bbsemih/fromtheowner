@@ -9,19 +9,15 @@ describe('ReportsController', () => {
 
   beforeEach(async () => {
     fakeReportsService = {
-
       //TODO: implement this
       create: () => {
-        Promise.resolve({id:1});
+        Promise.resolve({ id: 1 });
       },
     };
 
-
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ReportsController],
-      providers: [
-        {provide: ReportsService, useValue: fakeReportsService},
-      ]
+      providers: [{ provide: ReportsService, useValue: fakeReportsService }],
     }).compile();
 
     controller = module.get<ReportsController>(ReportsController);
@@ -31,7 +27,7 @@ describe('ReportsController', () => {
     expect(controller).toBeDefined();
   });
 
-  it("should get an estimate value based on a query", async () => {
+  it('should get an estimate value based on a query', async () => {
     const estimateParams = {
       id: 1,
       make: 'honda',
@@ -43,6 +39,6 @@ describe('ReportsController', () => {
     };
 
     const result = await controller.getEstimate(estimateParams);
-    expect(result).toEqual({price: 1000});
+    expect(result).toEqual({ price: 1000 });
   });
 });

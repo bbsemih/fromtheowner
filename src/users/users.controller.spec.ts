@@ -12,28 +12,32 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     fakeUsersService = {
-        findOne: (id: number) => {
-            return Promise.resolve({id, email:"semi@gmail.com", password:'semi'} as User);
-        },
-        find: (email: string) => {
-          return Promise.resolve([{id: 1, email, password: 'asdf'} as User]);
-        },
-        //remove: (id: number) => {},
-        //update: (id: number, attrs: any) => {},
+      findOne: (id: number) => {
+        return Promise.resolve({
+          id,
+          email: 'semi@gmail.com',
+          password: 'semi',
+        } as User);
+      },
+      find: (email: string) => {
+        return Promise.resolve([{ id: 1, email, password: 'asdf' } as User]);
+      },
+      //remove: (id: number) => {},
+      //update: (id: number, attrs: any) => {},
     };
 
     fakeAuthService = {
-        //signup: (email: string, password: string) => {
-        signin: (email:string, password:string) => {
-            return Promise.resolve({id: 1, email, password} as User);
-        },
-    }
+      //signup: (email: string, password: string) => {
+      signin: (email: string, password: string) => {
+        return Promise.resolve({ id: 1, email, password } as User);
+      },
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
       providers: [
-        {provide: UsersService, useValue: fakeUsersService},
-        {provide: AuthService, useValue: fakeAuthService},
+        { provide: UsersService, useValue: fakeUsersService },
+        { provide: AuthService, useValue: fakeAuthService },
       ],
     }).compile();
 
@@ -60,27 +64,27 @@ describe('UsersController', () => {
     await expect(controller.findUser('1')).rejects.toBeInstanceOf(NotFoundException);
   });
 
-  it('signin updates session object and returns user', async() => {
-    const session = {userId:-100};
-    const user = await controller.signin({email:'semi@gmail.com',password:'semi'}, session);
-    
+  it('signin updates session object and returns user', async () => {
+    const session = { userId: -100 };
+    const user = await controller.signin({ email: 'semi@gmail.com', password: 'semi' }, session);
+
     expect(user.id).toEqual(1);
-    expect(session.userId).toEqual(1)
-  })
+    expect(session.userId).toEqual(1);
+  });
 
-  it('signout should set userId property from the session to null', async() => {
-    const session = {userId:23}
-    await controller.signout(session)
-    expect(session.userId).toEqual(23)
-  })
+  it('signout should set userId property from the session to null', async () => {
+    const session = { userId: 23 };
+    await controller.signout(session);
+    expect(session.userId).toEqual(23);
+  });
 
-  it('createuser should create user and return it', async() => {
-    const session = {userId:-1}
-    const userDto = {email:"semi@gmail.com",password:'semi'}
-    const user = await controller.createUser(userDto,session); 
+  it('createuser should create user and return it', async () => {
+    const session = { userId: -1 };
+    const userDto = { email: 'semi@gmail.com', password: 'semi' };
+    const user = await controller.createUser(userDto, session);
 
     expect(user).toBeDefined();
     expect(user.id).toBeDefined();
     expect(user.email).toEqual(userDto.email);
-  })
+  });
 });

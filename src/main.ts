@@ -13,23 +13,22 @@ async function bootstrap() {
     .setTitle('fromtheowner')
     .setDescription("API Documentation of 'fromtheowner' application")
     .setVersion('1.0.0')
-    .addTag('api','swagger')
-    .build()
+    .addTag('api', 'swagger')
+    .build();
 
-    const document = SwaggerModule.createDocument(app,config);
-    SwaggerModule.setup('/v1/api',app,document);
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/v1/api', app, document);
 
-
-    if(process.env.CORS_ENABLE) {
-      app.enableCors({
-        origin: origin.length === 0 ? '*' : origin,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-        //will add more options
-      });
-    } else {
-      app.enableCors();
-    };
+  if (process.env.CORS_ENABLE) {
+    app.enableCors({
+      origin: origin.length === 0 ? '*' : origin,
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      //will add more options
+    });
+  } else {
+    app.enableCors();
+  }
 
   await app.listen(3000);
-};
+}
 bootstrap();

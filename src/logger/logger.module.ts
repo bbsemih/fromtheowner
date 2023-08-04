@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { LogService } from './logger.service';
 
 @Module({
-    imports:[LogService],
-    exports:[LogService],
+  imports: [LogService],
+  exports: [LogService],
 })
-
-export class LoggerModule {};
+export class LoggerModule {}
