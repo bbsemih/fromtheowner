@@ -10,9 +10,7 @@ import { WinstonModule } from 'nest-winston';
 import { LoggerModule } from './logger/logger.module';
 import { CarsController } from './cars/cars.controller';
 import * as winston from 'winston';
-//import { AppDataSource } from './data-source';
-import { User } from './users/user.entity';
-import { Report } from './reports/report.entity';
+import { dataSourceOptions } from 'db/data-source';
 
 // eslint-disable-next-line
 const cookieSession = require('cookie-session');
@@ -28,18 +26,7 @@ const cookieSession = require('cookie-session');
 
     })
     */
-    //TODO: mifrate to postgresql
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          synchronize: true,
-          entities: [User, Report],
-        };
-      },
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({

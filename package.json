@@ -19,7 +19,10 @@
         "test:debug": "cross-env NODE_ENV=development node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "cross-env NODE_ENV=development jest --config ./test/jest-e2e.json --maxWorkers=1",
         "pre-commit": "lint-staged",
-        "typeorm": "cross-env NODE_ENV=development node --require ts-node/register ./node_modules/typeorm/cli.js"
+        "typeorm": "npm run build && npx typeorm -d dist/db/data-source.js",
+        "migration:generate": "npm run typeorm -- migration:generate",
+        "migration:up": "npm run typeorm -- migration:run",
+        "migration:down": "npm run typeorm -- migration:revert"
     },
     "husky": {
         "hooks": {
