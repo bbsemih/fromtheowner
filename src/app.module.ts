@@ -5,13 +5,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
-import { User } from './users/user.entity';
-import { Report } from './reports/report.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import { LoggerModule } from './logger/logger.module';
 import { CarsController } from './cars/cars.controller';
 import * as winston from 'winston';
+//import { AppDataSource } from './data-source';
+import { User } from './users/user.entity';
+import { Report } from './reports/report.entity';
+
 // eslint-disable-next-line
 const cookieSession = require('cookie-session');
 
@@ -26,11 +28,10 @@ const cookieSession = require('cookie-session');
 
     })
     */
-    //Set up this to adapt to different environments
+    //TODO: mifrate to postgresql
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        //TODO: migrate to postgresql
         return {
           type: 'sqlite',
           database: config.get<string>('DB_NAME'),
