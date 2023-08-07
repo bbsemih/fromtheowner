@@ -8,9 +8,9 @@ import { ReportsModule } from './reports/reports.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import { LoggerModule } from './logger/logger.module';
-import { CarsController } from './cars/cars.controller';
 import * as winston from 'winston';
 import { dataSourceOptions } from 'db/data-source';
+import { AuthModule } from './auth/auth.module';
 
 // eslint-disable-next-line
 const cookieSession = require('cookie-session');
@@ -41,11 +41,12 @@ const cookieSession = require('cookie-session');
         }),
       ],
     }),
+    AuthModule,
     UsersModule,
     ReportsModule,
     LoggerModule,
   ],
-  controllers: [AppController, CarsController],
+  controllers: [AppController],
   providers: [
     AppService,
     {

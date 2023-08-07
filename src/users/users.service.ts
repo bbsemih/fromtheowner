@@ -50,6 +50,23 @@ export class UsersService {
     }
   }
 
+  async findOneByEmail(email: string) {
+    if (!email) {
+      return null;
+    }
+    try {
+      //findOne(email) is changed to findOne({where: {email}}) in typeorm
+      const user = await this.repo.findOne({ where: { email } });
+      if (!user) {
+        this.logger.warn(`user with email:${email} is not found!`, 'UsersService', LogLevelEnum.WARN, 'users.service.ts', LogTypeEnum.SERVICE);
+      }
+      return user;
+    } catch (err) {
+      this.logger.error(`Error finding user: ${err.message}`, 'UsersService', LogLevelEnum.ERROR, 'users.service.ts', LogTypeEnum.SERVICE);
+      throw err;
+    }
+  };
+
   async update(id: number, attrs: Partial<User>) {
     const user = await this.repo.findOneBy({ id });
     if (!user) {

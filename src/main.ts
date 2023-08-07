@@ -8,6 +8,7 @@ async function bootstrap() {
     //allow only warn and error types to only see critical log information in production
     //logger: process.env.NODE_ENV == 'development' ? ['log', 'debug', 'verbose', 'error','warn'] : ['error', 'warn']
   });
+  app.setGlobalPrefix('v1/api');
   //warn logs dont necessarily mean that there is an error, it is just a warning compared to error logs
   const config = new DocumentBuilder()
     .setTitle('fromtheowner')
@@ -17,8 +18,8 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/v1/api', app, document);
-
+  SwaggerModule.setup('swagger', app, document);
+  
   if (process.env.CORS_ENABLE) {
     app.enableCors({
       origin: origin.length === 0 ? '*' : origin,

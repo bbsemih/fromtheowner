@@ -7,7 +7,7 @@ export const dataSourceOptions: DataSourceOptions = {
   port: 5432,
   username: 'postgres',
   password: 'postgres',
-  database: 'typeorm',
+  database: 'postgres',
   synchronize: true,
   logging: true,
   entities: ['dist/**/*.entity.js'],

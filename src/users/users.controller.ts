@@ -4,46 +4,25 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth/auth.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 
 @Controller('auth')
 @Serialize(UserDto)
+@UseGuards(AuthGuard) //??
 export class UsersController {
   constructor(private usersService: UsersService, private authService: AuthService) {}
 
   @Get('/whoami')
-  @UseGuards(AuthGuard)
-  whoami(@CurrentUser() user: User) {
+  whoami(@CurrentUser() user: User): User {
     return user;
   }
 
-  @Post('/signout')
-  signout(@Session() session: any) {
-    session.userId = null;
-  }
-
-  @Post('/signup')
-  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
-    const { email, password } = body;
-    const user = await this.authService.signup(email, password);
-    session.userId = user.id;
-    return user;
-  }
-
-  @Post('/signin')
-  async signin(@Body() body: CreateUserDto, @Session() session: any) {
-    const { email, password } = body;
-    const user = await this.authService.signin(email, password);
-    session.userId = user.id;
-    return user;
-  }
-
+  //is if needed?
   @Get('/:id')
   async findUser(@Param('id') id: string) {
-    console.log('Handler is running');
     const user = await this.usersService.findOne(parseInt(id));
     if (!user) {
       throw new NotFoundException('user not found');
